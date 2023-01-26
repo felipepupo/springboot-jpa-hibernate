@@ -1,16 +1,39 @@
 package com.example.springbootjpahibernate.entity;
 
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
+@Table(name = "CourseDetails")
+@NamedQueries(
+    value = {
+        @NamedQuery(name = "query_get_all_couses", query = "Select c From Course c")
+    }
+)
 public class Course {
 
     @Id
     @GeneratedValue
     private Long id;
+
+    @Column(nullable = false)
     private String name;
+
+    @UpdateTimestamp
+    private LocalDateTime lastUpadtedDate;
+    
+    @CreationTimestamp
+    private LocalDateTime CreatedDate;
 
     protected Course(){
 
