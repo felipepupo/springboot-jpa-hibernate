@@ -1,13 +1,54 @@
 package com.example.springbootjpahibernate;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-@SpringBootTest
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+
+import com.example.springbootjpahibernate.entity.Course;
+import com.example.springbootjpahibernate.repository.CourseRepository;
+
+
+@SpringBootTest(classes = SpringbootJpaHibernateApplication.class)
 class SpringbootJpaHibernateApplicationTests {
 
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	@Autowired
+	private CourseRepository repository;
+
 	@Test
-	void contextLoads() {
+	void findById_basic() {
+		Course course = repository.findById(10002L);
+		assertEquals("Microservices in 20 Steps", course.getName());
+	}
+
+	@Test
+	@DirtiesContext
+	public void save_basic() {
+		// get a course
+		Course course = repository.findById(10001L);
+		assertEquals("JPA in 50 Steps", course.getName());
+
+		// update details
+		course.setName("JPA in 50 Steps - Updated");
+		repository.save(course);
+
+		// check the value
+		Course course1 = repository.findById(10001L);
+		assertEquals("JPA in 50 Steps - Updated", course1.getName());
+	}
+
+	@Test
+	@DirtiesContext
+	void deleteById_basic() {
+		repository.deleteById(10002L);
+		assertNull(repository.findById(10002L));
 	}
 
 }
