@@ -1,6 +1,5 @@
 package com.example.springbootjpahibernate.repository;
 
-import java.sql.Array;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -11,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.example.springbootjpahibernate.entity.Course;
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import com.example.springbootjpahibernate.entity.Review;
 
 
 @Repository
@@ -48,5 +47,31 @@ public class CourseRepository {
         query.setParameter(1, id);
 
         return query.getResultList();
+    }
+
+    public void addReviewsForCourse(){
+        Course course = findById(10003L);
+        
+        Review review = new Review("5", "Great Hands-on Stuff");
+        Review review2 = new Review("4", "Great");
+        
+        course.addReview(review);
+        review.setCourse(course);
+
+        course.addReview(review2);
+        review2.setCourse(course);
+
+        em.persist(review);
+        em.persist(review2);
+    }
+
+    public void addReviewsForCourseTwo(Long courseId, List<Review> reviews){
+        Course course = findById(courseId);
+            
+        for(Review review : reviews){			
+			course.addReview(review);
+			review.setCourse(course);
+			em.persist(review);
+		}
     }
 }

@@ -4,13 +4,13 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.springbootjpahibernate.entity.Course;
 
@@ -51,7 +51,7 @@ public class NativeQueriesTest {
 	@Test
 	@Transactional
 	public void native_queries_to_update() {
-		Query query = em.createNativeQuery("Update COURSE set last_updated_date=sysdate()");
+		Query query = em.createNativeQuery("Update COURSE set last_updated_date = CURRENT_TIMESTAMP()");
 		int noOfRowsUpdated = query.executeUpdate();
 		logger.info("noOfRowsUpdated  -> {}", noOfRowsUpdated);
 		//SELECT * FROM COURSE  -> [Course[Web Services in 100 Steps], Course[JPA in 50 Steps - Updated], Course[Spring in 50 Steps], Course[Spring Boot in 100 Steps]]
